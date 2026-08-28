@@ -16,6 +16,7 @@ void main() {
       },
       head: [
         link(href: '/styles.css', rel: 'stylesheet'),
+        link(href: '/sponsor-material.css', rel: 'stylesheet'),
         link(href: '/admin-cms.css', rel: 'stylesheet'),
         link(href: '/cms-v2.css', rel: 'stylesheet'),
         link(
