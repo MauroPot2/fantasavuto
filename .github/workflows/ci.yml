@@ -1,0 +1,45 @@
+name: Fantasavuto CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install Dart dependencies
+        run: dart pub get
+
+      - name: Analyze Dart
+        run: dart analyze
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check web/firebase-app.js
+          node --check web/cms-app.js
+          node --check web/site-utils.js
+
+      - name: Run JavaScript tests
+        run: node --test test/site-utils.test.mjs
+
+      - name: Build Jaspr static site
+        run: dart run jaspr_cli:jaspr build --sitemap-domain https://fantasavuto.web.app
+
+      - name: Verify hosting entry point
+        run: test -f build/jaspr/index.html
