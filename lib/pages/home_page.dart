@@ -4,6 +4,7 @@ import 'package:jaspr/jaspr.dart';
 import '../components/site_footer.dart';
 import '../components/site_header.dart';
 import '../components/sponsor_band.dart';
+import '../components/sponsor_section.dart';
 
 class HomePage extends StatelessComponent {
   const HomePage({super.key});
@@ -252,7 +253,6 @@ class HomePage extends StatelessComponent {
             ]),
           ]),
         ]),
-        SponsorBand(),
         section(classes: 'section social-callout', [
           div(classes: 'shell social-card', [
             div([
@@ -273,7 +273,9 @@ class HomePage extends StatelessComponent {
             ),
           ]),
         ]),
+        SponsorSection(),
       ]),
+      SponsorBand(),
       SiteFooter(),
     ]);
   }

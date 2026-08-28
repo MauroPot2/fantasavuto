@@ -17,6 +17,7 @@ void main() {
       head: [
         link(href: '/styles.css', rel: 'stylesheet'),
         link(href: '/sponsor-material.css', rel: 'stylesheet'),
+        link(href: '/sponsor-section.css', rel: 'stylesheet'),
         link(href: '/admin-cms.css', rel: 'stylesheet'),
         link(href: '/cms-v2.css', rel: 'stylesheet'),
         link(
@@ -63,6 +64,11 @@ void main() {
         Component.element(
           tag: 'script',
           attributes: const {'type': 'module', 'src': '/cms-app.js'},
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
+          attributes: const {'type': 'module', 'src': '/sponsor-dock-sync.js'},
           children: const [],
         ),
         Component.element(

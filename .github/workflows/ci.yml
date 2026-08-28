@@ -38,6 +38,7 @@ jobs:
           node --check web/cms-v2-storage-fix.js
           node --check web/sponsor-cache-migration.js
           node --check web/sponsor-image-optimization.js
+          node --check web/sponsor-dock-sync.js
           node --check web/site-utils.js
 
       - name: Run JavaScript tests
