@@ -5,8 +5,10 @@ con Jaspr e pensate per Firebase Hosting (`fantasavuto.web.app`).
 
 ## Cosa include
 
-- home editoriale con competizioni e vincitore di giornata dinamico;
-- regolamento nativo, leggibile anche da telefono e modificabile in Markdown;
+- home editoriale con competizioni cliccabili, premi e vincitore dinamico;
+- archivio dei vincitori separato per ciascuna competizione;
+- regolamento nativo diviso in sezioni Markdown modificabili singolarmente;
+- gestione completa dei premi dall’area admin;
 - area admin protetta con accesso Google e allowlist Firestore;
 - gestione completa degli sponsor: caricamento logo, link, ordine, visibilità,
   modifica ed eliminazione;
@@ -21,6 +23,7 @@ con Jaspr e pensate per Firebase Hosting (`fantasavuto.web.app`).
 | --- | --- |
 | `/` | Landing e contenuti della giornata |
 | `/regolamento` | Regolamento pubblico |
+| `/competizioni/<nome>` | Storico dei vincitori della competizione |
 | `/admin` | Gestione riservata |
 | `lib/` | Componenti e pagine Jaspr |
 | `web/` | Stili, favicon e integrazione Firebase browser |
@@ -93,8 +96,11 @@ permessi necessari alla verifica dell'allowlist presente in Firestore.
 
 | Documento/collezione | Uso |
 | --- | --- |
-| `siteContent/currentWinner` | giornata, squadra, allenatore, punteggio e data |
-| `siteContent/regulation` | stagione e testo Markdown del regolamento |
+| `siteContent/currentWinner` | risultato mostrato in primo piano nella home |
+| `siteContent/regulation` | stagione e data di aggiornamento |
+| `competitionWinners/{id}` | storico dei vincitori per competizione |
+| `regulationSections/{id}` | paragrafi del regolamento, ordine e visibilità |
+| `prizes/{id}` | premi, valore, competizione, ordine e visibilità |
 | `sponsors/{id}` | nome, logo, link, ordine e stato pubblico |
 | `admins/{uid}` | allowlist degli amministratori |
 | Storage `sponsors/*` | file dei loghi caricati dall'admin |

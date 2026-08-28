@@ -100,11 +100,22 @@ export function markdownToHtml(markdown = '') {
 }
 
 export function sortSponsors(sponsors = []) {
-  return [...sponsors].sort((a, b) => {
+  return sortByOrder(sponsors, 'name');
+}
+
+export function sortByOrder(items = [], labelKey = 'title') {
+  return [...items].sort((a, b) => {
     const orderA = Number.isFinite(Number(a.order)) ? Number(a.order) : 9999;
     const orderB = Number.isFinite(Number(b.order)) ? Number(b.order) : 9999;
     if (orderA !== orderB) return orderA - orderB;
-    return String(a.name || '').localeCompare(String(b.name || ''), 'it');
+    return String(a[labelKey] || '').localeCompare(String(b[labelKey] || ''), 'it');
+  });
+}
+
+export function sortWinners(winners = []) {
+  return [...winners].sort((a, b) => {
+    const byDate = String(b.date || '').localeCompare(String(a.date || ''));
+    return byDate || Number(b.matchday || 0) - Number(a.matchday || 0);
   });
 }
 

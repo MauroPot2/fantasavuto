@@ -28,7 +28,7 @@ class AdminPage extends StatelessComponent {
               h1([Component.text('Gestione Fantasavuto')]),
               p([
                 Component.text(
-                  'Aggiorna il vincitore di giornata, il regolamento e la fascia degli sponsor.',
+                  'Aggiorna vincitori, regolamento, premi e fascia degli sponsor.',
                 ),
               ]),
             ]),
@@ -54,21 +54,25 @@ class AdminPage extends StatelessComponent {
             ]),
           ],
         ),
-        const section(id: 'admin-login', classes: 'shell admin-state is-hidden', [
-          div(classes: 'state-icon', [Component.text('FS')]),
-          h2([Component.text('Accesso amministratore')]),
-          p([
-            Component.text(
-              'Accedi con l’account Google autorizzato per gestire i contenuti.',
+        const section(
+          id: 'admin-login',
+          classes: 'shell admin-state is-hidden',
+          [
+            div(classes: 'state-icon', [Component.text('FS')]),
+            h2([Component.text('Accesso amministratore')]),
+            p([
+              Component.text(
+                'Accedi con l’account Google autorizzato per gestire i contenuti.',
+              ),
+            ]),
+            button(
+              id: 'google-login-button',
+              classes: 'button button--primary',
+              attributes: const {'type': 'button'},
+              [Component.text('Accedi con Google')],
             ),
-          ]),
-          button(
-            id: 'google-login-button',
-            classes: 'button button--primary',
-            attributes: const {'type': 'button'},
-            [Component.text('Accedi con Google')],
-          ),
-        ]),
+          ],
+        ),
         const section(
           id: 'admin-unauthorized',
           classes: 'shell admin-state is-hidden',
@@ -140,9 +144,17 @@ class AdminPage extends StatelessComponent {
                 ),
                 button(
                   classes: 'admin-tab',
-                  attributes: {'type': 'button', 'data-admin-tab': 'sponsors'},
+                  attributes: {'type': 'button', 'data-admin-tab': 'prizes'},
                   [
                     span([Component.text('03')]),
+                    Component.text('Premi'),
+                  ],
+                ),
+                button(
+                  classes: 'admin-tab',
+                  attributes: {'type': 'button', 'data-admin-tab': 'sponsors'},
+                  [
+                    span([Component.text('04')]),
                     Component.text('Sponsor'),
                   ],
                 ),
@@ -151,6 +163,7 @@ class AdminPage extends StatelessComponent {
             div(classes: 'admin-panels', [
               _WinnerPanel(),
               _RegulationPanel(),
+              _PrizesPanel(),
               _SponsorsPanel(),
             ]),
           ]),
@@ -185,11 +198,21 @@ class _WinnerPanel extends StatelessComponent {
           ]),
           p([
             Component.text(
-              'Il dato salvato appare subito nella scheda principale del sito.',
+              'Ogni risultato alimenta lo storico della competizione selezionata.',
             ),
           ]),
         ]),
         form(id: 'winner-form', classes: 'admin-form', [
+          _SelectField(
+            id: 'winner-competition-input',
+            labelText: 'Competizione',
+            options: {
+              'campionato': 'Campionato',
+              'champions-savuto': 'Champions Savuto',
+              'campione-inverno': 'Campione d’inverno',
+              'coppa-sponsor': 'Coppa Sponsor',
+            },
+          ),
           div(classes: 'form-grid form-grid--2', [
             _Field(
               id: 'winner-matchday-input',
@@ -244,12 +267,32 @@ class _WinnerPanel extends StatelessComponent {
               'required': 'required',
             },
           ),
+          label(classes: 'switch-field', [
+            input(
+              id: 'winner-featured-input',
+              attributes: {
+                'type': 'checkbox',
+                'name': 'featured',
+                'checked': 'checked',
+              },
+            ),
+            span(classes: 'switch-control', []),
+            span([Component.text('Mostra questo risultato anche nella home')]),
+          ]),
           div(classes: 'form-actions', [
             button(
               classes: 'button button--primary',
               attributes: {'type': 'submit'},
-              [Component.text('Pubblica vincitore')],
+              [Component.text('Aggiungi allo storico')],
             ),
+          ]),
+        ]),
+        div(classes: 'admin-list-wrap', [
+          h3([Component.text('Ultimi risultati pubblicati')]),
+          div(id: 'winner-admin-list', classes: 'managed-list', [
+            p(classes: 'empty-list', [
+              Component.text('Nessun risultato pubblicato.'),
+            ]),
           ]),
         ]),
       ],
@@ -272,54 +315,228 @@ class _RegulationPanel extends StatelessComponent {
           ]),
           p([
             Component.text(
-              'Scrivi in Markdown: titoli con #, elenchi con - e grassetti con **testo**.',
+              'Aggiorna una sezione alla volta senza dover riscrivere l’intero regolamento.',
             ),
           ]),
         ]),
-        form(id: 'regulation-form', classes: 'admin-form', [
+        form(id: 'regulation-meta-form', classes: 'admin-form compact-form', [
           _Field(
             id: 'regulation-season-input',
             labelText: 'Stagione',
             type: 'text',
             attributes: {
               'maxlength': '20',
-              'value': '2025/26',
+              'value': '2026/27',
               'required': 'required',
             },
           ),
-          div(classes: 'field', [
-            label(
-              attributes: {'for': 'regulation-markdown-input'},
-              [Component.text('Testo del regolamento')],
-            ),
-            textarea(
-              id: 'regulation-markdown-input',
-              attributes: {
-                'name': 'markdown',
-                'rows': '22',
-                'maxlength': '100000',
-                'placeholder':
-                    '# Regolamento 2025/26\n\n## 1. Rosa\n- 25 calciatori\n- 300 crediti',
-                'required': 'required',
-              },
-              [],
+          div(classes: 'form-actions', [
+            button(
+              classes: 'button button--dark',
+              attributes: {'type': 'submit'},
+              [Component.text('Aggiorna stagione')],
             ),
           ]),
-          details(classes: 'markdown-help', [
-            summary([Component.text('Guida rapida alla formattazione')]),
-            div([
-              code([Component.text('# Titolo principale')]),
-              code([Component.text('## Titolo di sezione')]),
-              code([Component.text('- Voce di elenco')]),
-              code([Component.text('**testo in grassetto**')]),
+        ]),
+        div(classes: 'admin-subsection', [
+          div(classes: 'admin-subsection__heading', [
+            h3([Component.text('Sezioni del regolamento')]),
+            p([Component.text('Esempi: Rosa, Mercato, Formazioni, Penalità.')]),
+          ]),
+          form(id: 'regulation-section-form', classes: 'admin-form', [
+            input(
+              id: 'regulation-section-id-input',
+              attributes: {'type': 'hidden', 'name': 'sectionId'},
+            ),
+            div(classes: 'form-grid form-grid--2', [
+              _Field(
+                id: 'regulation-section-title-input',
+                labelText: 'Titolo sezione',
+                type: 'text',
+                attributes: {
+                  'maxlength': '100',
+                  'placeholder': 'Es. Mercato',
+                  'required': 'required',
+                },
+              ),
+              _Field(
+                id: 'regulation-section-order-input',
+                labelText: 'Ordine',
+                type: 'number',
+                attributes: {
+                  'min': '0',
+                  'max': '9999',
+                  'value': '100',
+                  'required': 'required',
+                },
+              ),
             ]),
+            _TextareaField(
+              id: 'regulation-section-markdown-input',
+              labelText: 'Contenuto della sezione',
+              attributes: {
+                'rows': '12',
+                'maxlength': '30000',
+                'placeholder': 'Descrivi qui le regole. Usa - per gli elenchi e **testo** per il grassetto.',
+                'required': 'required',
+              },
+            ),
+            label(classes: 'switch-field', [
+              input(
+                id: 'regulation-section-active-input',
+                attributes: {
+                  'type': 'checkbox',
+                  'name': 'active',
+                  'checked': 'checked',
+                },
+              ),
+              span(classes: 'switch-control', []),
+              span([Component.text('Mostra questa sezione nel sito')]),
+            ]),
+            details(classes: 'markdown-help', [
+              summary([Component.text('Guida rapida alla formattazione')]),
+              div([
+                code([Component.text('## Titolo interno')]),
+                code([Component.text('- Voce di elenco')]),
+                code([Component.text('**testo in grassetto**')]),
+              ]),
+            ]),
+            div(classes: 'form-actions', [
+              button(
+                id: 'regulation-section-submit-button',
+                classes: 'button button--primary',
+                attributes: {'type': 'submit'},
+                [Component.text('Aggiungi sezione')],
+              ),
+              button(
+                id: 'regulation-section-cancel-button',
+                classes: 'text-button is-hidden',
+                attributes: {'type': 'button'},
+                [Component.text('Annulla modifica')],
+              ),
+            ]),
+          ]),
+          div(id: 'regulation-section-list', classes: 'managed-list', [
+            p(classes: 'empty-list', [
+              Component.text('Nessuna sezione inserita.'),
+            ]),
+          ]),
+        ]),
+      ],
+    );
+  }
+}
+
+class _PrizesPanel extends StatelessComponent {
+  @override
+  Component build(BuildContext context) {
+    return const section(
+      id: 'panel-prizes',
+      classes: 'admin-panel is-hidden',
+      attributes: {'data-admin-panel': 'prizes'},
+      [
+        div(classes: 'panel-heading', [
+          div([
+            p(classes: 'eyebrow', [Component.text('Home page')]),
+            h2([Component.text('Premi')]),
+          ]),
+          p([
+            Component.text(
+              'Gestisci montepremi e riconoscimenti, associandoli alla competizione corretta.',
+            ),
+          ]),
+        ]),
+        form(id: 'prize-form', classes: 'admin-form', [
+          input(
+            id: 'prize-id-input',
+            attributes: {'type': 'hidden', 'name': 'prizeId'},
+          ),
+          _SelectField(
+            id: 'prize-competition-input',
+            labelText: 'Competizione',
+            options: {
+              'general': 'Premio generale',
+              'campionato': 'Campionato',
+              'champions-savuto': 'Champions Savuto',
+              'campione-inverno': 'Campione d’inverno',
+              'coppa-sponsor': 'Coppa Sponsor',
+            },
+          ),
+          div(classes: 'form-grid form-grid--2', [
+            _Field(
+              id: 'prize-title-input',
+              labelText: 'Titolo premio',
+              type: 'text',
+              attributes: {
+                'maxlength': '100',
+                'placeholder': 'Es. 1° classificato',
+                'required': 'required',
+              },
+            ),
+            _Field(
+              id: 'prize-amount-input',
+              labelText: 'Valore',
+              type: 'text',
+              attributes: {
+                'maxlength': '50',
+                'placeholder': 'Es. € 200 oppure Trofeo',
+                'required': 'required',
+              },
+            ),
+          ]),
+          _TextareaField(
+            id: 'prize-description-input',
+            labelText: 'Descrizione',
+            attributes: {
+              'rows': '4',
+              'maxlength': '500',
+              'placeholder': 'Descrizione facoltativa del premio.',
+            },
+          ),
+          _Field(
+            id: 'prize-order-input',
+            labelText: 'Ordine',
+            type: 'number',
+            attributes: {
+              'min': '0',
+              'max': '9999',
+              'value': '100',
+              'required': 'required',
+            },
+          ),
+          label(classes: 'switch-field', [
+            input(
+              id: 'prize-active-input',
+              attributes: {
+                'type': 'checkbox',
+                'name': 'active',
+                'checked': 'checked',
+              },
+            ),
+            span(classes: 'switch-control', []),
+            span([Component.text('Mostra il premio nel sito')]),
           ]),
           div(classes: 'form-actions', [
             button(
+              id: 'prize-submit-button',
               classes: 'button button--primary',
               attributes: {'type': 'submit'},
-              [Component.text('Aggiorna regolamento')],
+              [Component.text('Aggiungi premio')],
             ),
+            button(
+              id: 'prize-cancel-button',
+              classes: 'text-button is-hidden',
+              attributes: {'type': 'button'},
+              [Component.text('Annulla modifica')],
+            ),
+          ]),
+        ]),
+        div(classes: 'admin-list-wrap', [
+          h3([Component.text('Premi inseriti')]),
+          div(id: 'prize-admin-list', classes: 'managed-list', [
+            p(classes: 'empty-list', [
+              Component.text('Nessun premio inserito.'),
+            ]),
           ]),
         ]),
       ],
@@ -463,6 +680,56 @@ class _Field extends StatelessComponent {
     return div(classes: 'field', [
       label(attributes: {'for': id}, [Component.text(labelText)]),
       input(id: id, attributes: {'type': type, 'name': id, ...attributes}),
+    ]);
+  }
+}
+
+class _SelectField extends StatelessComponent {
+  const _SelectField({
+    required this.id,
+    required this.labelText,
+    required this.options,
+  });
+  final String id;
+  final String labelText;
+  final Map<String, String> options;
+
+  @override
+  Component build(BuildContext context) {
+    return div(classes: 'field', [
+      label(attributes: {'for': id}, [Component.text(labelText)]),
+      Component.element(
+        tag: 'select',
+        attributes: {'id': id, 'name': id, 'required': 'required'},
+        children: options.entries
+            .map(
+              (entry) => Component.element(
+                tag: 'option',
+                attributes: {'value': entry.key},
+                children: [Component.text(entry.value)],
+              ),
+            )
+            .toList(),
+      ),
+    ]);
+  }
+}
+
+class _TextareaField extends StatelessComponent {
+  const _TextareaField({
+    required this.id,
+    required this.labelText,
+    this.attributes = const {},
+  });
+  final String id;
+  final String labelText;
+  final Map<String, String> attributes;
+
+  @override
+  Component build(BuildContext context) {
+    return div(classes: 'field', [
+      label(attributes: {'for': id}, [Component.text(labelText)]),
+      textarea(id: id, attributes: {'name': id, ...attributes}, []),
     ]);
   }
 }

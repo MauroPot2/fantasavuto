@@ -17,6 +17,8 @@ service cloud.firestore {
 
     function validWinner() {
       return request.resource.data.keys().hasOnly([
+          'competitionId',
+          'competitionName',
           'title',
           'team',
           'manager',
@@ -25,6 +27,13 @@ service cloud.firestore {
           'date',
           'updatedAt'
         ])
+        && request.resource.data.competitionId in [
+          'campionato',
+          'champions-savuto',
+          'campione-inverno',
+          'coppa-sponsor'
+        ]
+        && isShortText(request.resource.data.competitionName, 60)
         && isShortText(request.resource.data.title, 90)
         && isShortText(request.resource.data.team, 80)
         && request.resource.data.manager is string
@@ -44,11 +53,84 @@ service cloud.firestore {
     function validRegulation() {
       return request.resource.data.keys().hasOnly([
           'season',
-          'markdown',
           'updatedAt'
         ])
         && isShortText(request.resource.data.season, 20)
-        && isShortText(request.resource.data.markdown, 100000)
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validHistoryWinner() {
+      return request.resource.data.keys().hasOnly([
+          'competitionId',
+          'competitionName',
+          'title',
+          'team',
+          'manager',
+          'score',
+          'matchday',
+          'date',
+          'createdAt',
+          'updatedAt'
+        ])
+        && request.resource.data.competitionId in [
+          'campionato',
+          'champions-savuto',
+          'campione-inverno',
+          'coppa-sponsor'
+        ]
+        && isShortText(request.resource.data.competitionName, 60)
+        && isShortText(request.resource.data.title, 90)
+        && isShortText(request.resource.data.team, 80)
+        && request.resource.data.manager is string
+        && request.resource.data.manager.size() <= 80
+        && (request.resource.data.score is int || request.resource.data.score is float)
+        && request.resource.data.score >= 0
+        && request.resource.data.score <= 300
+        && request.resource.data.matchday is int
+        && request.resource.data.matchday >= 1
+        && request.resource.data.matchday <= 60
+        && request.resource.data.date is string
+        && request.resource.data.date.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validRegulationSection() {
+      return request.resource.data.keys().hasOnly([
+          'title', 'markdown', 'active', 'order', 'createdAt', 'updatedAt'
+        ])
+        && isShortText(request.resource.data.title, 100)
+        && isShortText(request.resource.data.markdown, 30000)
+        && request.resource.data.active is bool
+        && request.resource.data.order is int
+        && request.resource.data.order >= 0
+        && request.resource.data.order <= 9999
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validPrize() {
+      return request.resource.data.keys().hasOnly([
+          'competitionId', 'competitionName', 'title', 'amount',
+          'description', 'active', 'order', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.competitionId in [
+          'general',
+          'campionato',
+          'champions-savuto',
+          'campione-inverno',
+          'coppa-sponsor'
+        ]
+        && isShortText(request.resource.data.competitionName, 60)
+        && isShortText(request.resource.data.title, 100)
+        && isShortText(request.resource.data.amount, 50)
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 500
+        && request.resource.data.active is bool
+        && request.resource.data.order is int
+        && request.resource.data.order >= 0
+        && request.resource.data.order <= 9999
+        && request.resource.data.createdAt is timestamp
         && request.resource.data.updatedAt is timestamp;
     }
 
@@ -84,8 +166,7 @@ service cloud.firestore {
 
     match /admins/{uid} {
       allow get: if signedIn()
-        && request.auth.uid == uid
-        && isAdmin();
+        && request.auth.uid == uid;
       allow list, create, update, delete: if false;
     }
 
@@ -104,6 +185,24 @@ service cloud.firestore {
       allow get: if resource.data.active == true || isAdmin();
       allow list: if resource.data.active == true || isAdmin();
       allow create, update: if isAdmin() && validSponsor();
+      allow delete: if isAdmin();
+    }
+
+    match /competitionWinners/{winnerId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && validHistoryWinner();
+      allow delete: if isAdmin();
+    }
+
+    match /regulationSections/{sectionId} {
+      allow get, list: if resource.data.active == true || isAdmin();
+      allow create, update: if isAdmin() && validRegulationSection();
+      allow delete: if isAdmin();
+    }
+
+    match /prizes/{prizeId} {
+      allow get, list: if resource.data.active == true || isAdmin();
+      allow create, update: if isAdmin() && validPrize();
       allow delete: if isAdmin();
     }
 

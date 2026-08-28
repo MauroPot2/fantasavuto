@@ -13,8 +13,7 @@ class RegulationPage extends StatelessComponent {
       Document.head(
         title: 'Regolamento | Fantasavuto',
         meta: {
-          'description':
-              'Regolamento aggiornato del Fantacalcio del Savuto, stagione 2026/27.',
+          'description': 'Regolamento aggiornato del Fantacalcio del Savuto, stagione 2026/27.',
         },
       ),
       Document.body(attributes: {'data-page': 'regulation'}),
@@ -58,7 +57,25 @@ class RegulationPage extends StatelessComponent {
                 dt([Component.text('Quota')]),
                 dd([Component.text('€ 35,00')]),
               ]),
+              nav(
+                classes: 'regulation-toc',
+                attributes: {'aria-label': 'Sezioni del regolamento'},
+                [
+                  p([Component.text('Vai alla sezione')]),
+                  ul(id: 'regulation-toc-list', [
+                    li([
+                      a(href: '#regola-rosa', [Component.text('Rosa')]),
+                    ]),
+                    li([
+                      a(href: '#regola-competizioni', [
+                        Component.text('Competizioni'),
+                      ]),
+                    ]),
+                  ]),
+                ],
+              ),
               p(classes: 'regulation-updated', [
+                Component.text('Ultimo aggiornamento: '),
                 Component.element(
                   tag: 'time',
                   attributes: {'id': 'regulation-updated-at'},
@@ -66,30 +83,41 @@ class RegulationPage extends StatelessComponent {
                 ),
               ]),
             ]),
-            article(id: 'regulation-content', classes: 'regulation-content', [
-              h2([Component.text('Regolamento stagione 2026/27')]),
+            div(id: 'regulation-sections', classes: 'regulation-sections', [
+              article(id: 'regola-rosa', classes: 'regulation-section', [
+                span(classes: 'regulation-section__number', [
+                  Component.text('01'),
+                ]),
+                div(classes: 'regulation-content', [
+                  h2([Component.text('Composizione della rosa')]),
+                  p([
+                    Component.text(
+                      'Ogni fantallenatore dispone di 300 crediti per comporre una rosa di 25 calciatori secondo i ruoli previsti dalla modalità Mantra.',
+                    ),
+                  ]),
+                ]),
+              ]),
+              article(
+                id: 'regola-competizioni',
+                classes: 'regulation-section',
+                [
+                  span(classes: 'regulation-section__number', [
+                    Component.text('02'),
+                  ]),
+                  div(classes: 'regulation-content', [
+                    h2([Component.text('Competizioni')]),
+                    ul([
+                      li([Component.text('Campionato')]),
+                      li([Component.text('Campione d’inverno')]),
+                      li([Component.text('Champions Savuto')]),
+                      li([Component.text('Coppa Sponsor Formula Uno')]),
+                    ]),
+                  ]),
+                ],
+              ),
               p(classes: 'notice-box', [
                 Component.text(
-                  'Questa è la versione sintetica iniziale. Dall’area admin sarà possibile pubblicare il testo completo senza modificare il codice.',
-                ),
-              ]),
-              h3([Component.text('1. Composizione della rosa')]),
-              p([
-                Component.text(
-                  'Ogni fantallenatore dispone di 300 crediti per comporre una rosa di 25 calciatori secondo i ruoli previsti dalla modalità Mantra.',
-                ),
-              ]),
-              h3([Component.text('2. Competizioni')]),
-              ul([
-                li([Component.text('Campionato')]),
-                li([Component.text('Campione d’inverno')]),
-                li([Component.text('Champions Savuto')]),
-                li([Component.text('Coppa Sponsor Formula Uno')]),
-              ]),
-              h3([Component.text('3. Aggiornamenti')]),
-              p([
-                Component.text(
-                  'In caso di modifica farà fede il testo pubblicato in questa pagina con la relativa data di aggiornamento.',
+                  'Le altre sezioni saranno pubblicate e aggiornate singolarmente dall’area amministrativa.',
                 ),
               ]),
             ]),

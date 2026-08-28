@@ -14,8 +14,7 @@ class HomePage extends StatelessComponent {
       Document.head(
         title: 'Fantasavuto | Il Fantacalcio del Savuto',
         meta: {
-          'description':
-              'Il portale del Fantacalcio del Savuto: competizioni, vincitori, regolamento e sponsor.',
+          'description': 'Il portale del Fantacalcio del Savuto: competizioni, vincitori, regolamento e sponsor.',
         },
       ),
       Document.body(attributes: {'data-page': 'home'}),
@@ -25,6 +24,16 @@ class HomePage extends StatelessComponent {
           div(classes: 'hero-lines', []),
           div(classes: 'shell hero-grid', [
             div(classes: 'hero-copy', [
+              img(
+                src: '/assets/fantasavuto-logo.webp',
+                alt: 'Logo Fantacalcio del Savuto',
+                classes: 'hero-logo',
+                attributes: {
+                  'width': '118',
+                  'height': '118',
+                  'fetchpriority': 'high',
+                },
+              ),
               p(classes: 'eyebrow eyebrow--accent', [
                 span(classes: 'status-pulse', []),
                 Component.text('Stagione 2026/27 · 4ª edizione'),
@@ -119,34 +128,62 @@ class HomePage extends StatelessComponent {
                 number: '01',
                 tag: '38 giornate',
                 title: 'Campionato',
-                description:
-                    'La corsa lunga: continuità, strategia e classifica generale.',
+                href: '/competizioni/campionato',
+                description: 'La corsa lunga: continuità, strategia e classifica generale.',
                 accent: 'lime',
               ),
               _CompetitionCard(
                 number: '02',
                 tag: 'Fase finale',
                 title: 'Champions Savuto',
-                description:
-                    'La competizione che premia chi sa alzare il livello nei momenti decisivi.',
+                href: '/competizioni/champions-savuto',
+                description: 'La competizione che premia chi sa alzare il livello nei momenti decisivi.',
                 accent: 'orange',
               ),
               _CompetitionCard(
                 number: '03',
                 tag: 'Girone d’andata',
                 title: 'Campione d’inverno',
-                description:
-                    'Il primo traguardo stagionale per chi chiude davanti a metà percorso.',
+                href: '/competizioni/campione-inverno',
+                description: 'Il primo traguardo stagionale per chi chiude davanti a metà percorso.',
                 accent: 'blue',
               ),
               _CompetitionCard(
                 number: '04',
                 tag: 'Formula Uno',
                 title: 'Coppa Sponsor',
-                description:
-                    'Una classifica speciale che valorizza costanza e piazzamenti.',
+                href: '/competizioni/coppa-sponsor',
+                description: 'Una classifica speciale che valorizza costanza e piazzamenti.',
                 accent: 'pink',
               ),
+            ]),
+          ]),
+        ]),
+        section(id: 'premi', classes: 'section prizes-section', [
+          div(classes: 'shell', [
+            div(classes: 'section-heading', [
+              div([
+                p(classes: 'eyebrow', [Component.text('Traguardi stagionali')]),
+                h2([Component.text('Premi in palio')]),
+              ]),
+              p([
+                Component.text(
+                  'Il montepremi e i riconoscimenti ufficiali, aggiornati direttamente dall’amministrazione.',
+                ),
+              ]),
+            ]),
+            div(id: 'prizes-grid', classes: 'prize-grid', [
+              article(classes: 'prize-card prize-card--placeholder', [
+                span(classes: 'prize-card__index', [Component.text('—')]),
+                div([
+                  h3([Component.text('Premi in aggiornamento')]),
+                  p([
+                    Component.text(
+                      'L’amministrazione pubblicherà qui il montepremi della stagione.',
+                    ),
+                  ]),
+                ]),
+              ]),
             ]),
           ]),
         ]),
@@ -257,6 +294,7 @@ class _CompetitionCard extends StatelessComponent {
     required this.number,
     required this.tag,
     required this.title,
+    required this.href,
     required this.description,
     required this.accent,
   });
@@ -264,25 +302,30 @@ class _CompetitionCard extends StatelessComponent {
   final String number;
   final String tag;
   final String title;
+  final String href;
   final String description;
   final String accent;
 
   @override
   Component build(BuildContext context) {
-    return article(classes: 'competition-card competition-card--$accent', [
-      div(classes: 'competition-card__meta', [
-        span([Component.text(number)]),
-        small([Component.text(tag)]),
-      ]),
-      div(classes: 'competition-card__copy', [
-        h3([Component.text(title)]),
-        p([Component.text(description)]),
-      ]),
-      const span(
-        classes: 'competition-card__arrow',
-        attributes: {'aria-hidden': 'true'},
-        [Component.text('↗')],
-      ),
-    ]);
+    return a(
+      href: href,
+      classes: 'competition-card competition-card--$accent',
+      [
+        div(classes: 'competition-card__meta', [
+          span([Component.text(number)]),
+          small([Component.text(tag)]),
+        ]),
+        div(classes: 'competition-card__copy', [
+          h3([Component.text(title)]),
+          p([Component.text(description)]),
+        ]),
+        const span(
+          classes: 'competition-card__arrow',
+          attributes: {'aria-hidden': 'true'},
+          [Component.text('↗')],
+        ),
+      ],
+    );
   }
 }
