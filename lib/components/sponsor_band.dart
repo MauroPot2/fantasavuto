@@ -6,7 +6,7 @@ class SponsorBand extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return section(
+    return const section(
       id: 'sponsor-section',
       classes: 'sponsor-band is-hidden',
       attributes: const {'aria-labelledby': 'sponsor-title'},

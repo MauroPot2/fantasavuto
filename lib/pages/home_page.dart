@@ -14,7 +14,8 @@ class HomePage extends StatelessComponent {
       Document.head(
         title: 'Fantasavuto | Il Fantacalcio del Savuto',
         meta: {
-          'description': 'Il portale del Fantacalcio del Savuto: competizioni, vincitori, regolamento e sponsor.',
+          'description':
+              'Il portale del Fantacalcio del Savuto: competizioni, vincitori, regolamento e sponsor.',
         },
       ),
       Document.body(attributes: {'data-page': 'home'}),
@@ -129,7 +130,8 @@ class HomePage extends StatelessComponent {
                 tag: '38 giornate',
                 title: 'Campionato',
                 href: '/competizioni/campionato',
-                description: 'La corsa lunga: continuità, strategia e classifica generale.',
+                description:
+                    'La corsa lunga: continuità, strategia e classifica generale.',
                 accent: 'lime',
               ),
               _CompetitionCard(
@@ -137,7 +139,8 @@ class HomePage extends StatelessComponent {
                 tag: 'Fase finale',
                 title: 'Champions Savuto',
                 href: '/competizioni/champions-savuto',
-                description: 'La competizione che premia chi sa alzare il livello nei momenti decisivi.',
+                description:
+                    'La competizione che premia chi sa alzare il livello nei momenti decisivi.',
                 accent: 'orange',
               ),
               _CompetitionCard(
@@ -145,7 +148,8 @@ class HomePage extends StatelessComponent {
                 tag: 'Girone d’andata',
                 title: 'Campione d’inverno',
                 href: '/competizioni/campione-inverno',
-                description: 'Il primo traguardo stagionale per chi chiude davanti a metà percorso.',
+                description:
+                    'Il primo traguardo stagionale per chi chiude davanti a metà percorso.',
                 accent: 'blue',
               ),
               _CompetitionCard(
@@ -153,7 +157,8 @@ class HomePage extends StatelessComponent {
                 tag: 'Formula Uno',
                 title: 'Coppa Sponsor',
                 href: '/competizioni/coppa-sponsor',
-                description: 'Una classifica speciale che valorizza costanza e piazzamenti.',
+                description:
+                    'Una classifica speciale che valorizza costanza e piazzamenti.',
                 accent: 'pink',
               ),
             ]),
@@ -194,12 +199,12 @@ class HomePage extends StatelessComponent {
                 Component.text('Regole chiare, stagione migliore'),
               ]),
               h2([
-                Component.text('Il regolamento non deve essere '),
-                em([Component.text('un PDF infinito.')]),
+                Component.text('Il regolamento'),
+                em([Component.text('semplice.')]),
               ]),
               p([
                 Component.text(
-                  'Lo trasformiamo in una pagina leggibile da telefono, aggiornata dall’area amministrativa e consultabile in pochi secondi.',
+                  'Consultabile anche dal cellulare, con tutte le informazioni necessarie per giocare e vincere.',
                 ),
               ]),
               a(href: '/regolamento', classes: 'text-link text-link--light', [
@@ -217,7 +222,7 @@ class HomePage extends StatelessComponent {
                   strong([Component.text('Modalità Mantra')]),
                   p([
                     Component.text(
-                      'Ruoli, moduli e sostituzioni organizzati in sezioni immediate.',
+                      'Ruoli, crediti e calciatori: tutto secondo le regole della modalità Mantra.',
                     ),
                   ]),
                 ]),
@@ -228,7 +233,7 @@ class HomePage extends StatelessComponent {
                   strong([Component.text('Mercato e scadenze')]),
                   p([
                     Component.text(
-                      'Finestre e limiti sempre visibili senza cercare tra dieci pagine.',
+                      'Finestre di mercato, scadenze e regole per le operazioni tra fantallenatori.',
                     ),
                   ]),
                 ]),
@@ -239,7 +244,7 @@ class HomePage extends StatelessComponent {
                   strong([Component.text('Premi e competizioni')]),
                   p([
                     Component.text(
-                      'Tutti i criteri raccolti in un’unica versione aggiornata.',
+                      'Tutte le competizioni della stagione, con premi e riconoscimenti ufficiali.',
                     ),
                   ]),
                 ]),
