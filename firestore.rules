@@ -1,0 +1,114 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isShortText(value, maxLength) {
+      return value is string && value.size() > 0 && value.size() <= maxLength;
+    }
+
+    function validWinner() {
+      return request.resource.data.keys().hasOnly([
+          'title',
+          'team',
+          'manager',
+          'score',
+          'matchday',
+          'date',
+          'updatedAt'
+        ])
+        && isShortText(request.resource.data.title, 90)
+        && isShortText(request.resource.data.team, 80)
+        && request.resource.data.manager is string
+        && request.resource.data.manager.size() <= 80
+        && (request.resource.data.score is int
+          || request.resource.data.score is float)
+        && request.resource.data.score >= 0
+        && request.resource.data.score <= 300
+        && request.resource.data.matchday is int
+        && request.resource.data.matchday >= 1
+        && request.resource.data.matchday <= 60
+        && request.resource.data.date is string
+        && request.resource.data.date.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validRegulation() {
+      return request.resource.data.keys().hasOnly([
+          'season',
+          'markdown',
+          'updatedAt'
+        ])
+        && isShortText(request.resource.data.season, 20)
+        && isShortText(request.resource.data.markdown, 100000)
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validSponsor() {
+      return request.resource.data.keys().hasOnly([
+          'name',
+          'logoUrl',
+          'storagePath',
+          'websiteUrl',
+          'active',
+          'order',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isShortText(request.resource.data.name, 100)
+        && isShortText(request.resource.data.logoUrl, 2048)
+        && request.resource.data.logoUrl.matches('^https://.+')
+        && request.resource.data.storagePath is string
+        && request.resource.data.storagePath.size() <= 500
+        && request.resource.data.websiteUrl is string
+        && request.resource.data.websiteUrl.size() <= 2048
+        && (
+          request.resource.data.websiteUrl == ''
+          || request.resource.data.websiteUrl.matches('^https?://.+')
+        )
+        && request.resource.data.active is bool
+        && request.resource.data.order is int
+        && request.resource.data.order >= 0
+        && request.resource.data.order <= 9999
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    match /admins/{uid} {
+      allow get: if signedIn()
+        && request.auth.uid == uid
+        && isAdmin();
+      allow list, create, update, delete: if false;
+    }
+
+    match /siteContent/{documentId} {
+      allow get: if documentId in ['currentWinner', 'regulation'];
+      allow list: if false;
+      allow create, update: if isAdmin()
+        && (
+          (documentId == 'currentWinner' && validWinner())
+          || (documentId == 'regulation' && validRegulation())
+        );
+      allow delete: if false;
+    }
+
+    match /sponsors/{sponsorId} {
+      allow get: if resource.data.active == true || isAdmin();
+      allow list: if resource.data.active == true || isAdmin();
+      allow create, update: if isAdmin() && validSponsor();
+      allow delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

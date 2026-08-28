@@ -1,0 +1,11 @@
+{
+  "name": "fantasavuto-web-support",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "firebase": "^12.18.0"
+  }
+}

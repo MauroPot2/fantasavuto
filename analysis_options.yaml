@@ -1,0 +1,15 @@
+plugins:
+  jaspr_lints:
+    version: ^0.7.2
+    diagnostics:
+      sort_children_last: true
+      prefer_html_components: true
+      styles_ordering: true
+
+linter:
+  rules:
+    avoid_print: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    use_super_parameters: true
+
