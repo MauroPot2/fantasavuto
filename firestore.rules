@@ -6,9 +6,20 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdmin() {
+    function hasVerifiedEmail() {
       return signedIn()
-        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+        && request.auth.token.get('email', '') is string
+        && request.auth.token.get('email', '').size() > 0
+        && request.auth.token.get('email_verified', false) == true;
+    }
+
+    function adminEmail() {
+      return request.auth.token.get('email', '').lower();
+    }
+
+    function isAdmin() {
+      return hasVerifiedEmail()
+        && exists(/databases/$(database)/documents/admins/$(adminEmail()));
     }
 
     function isShortText(value, maxLength) {
@@ -164,9 +175,9 @@ service cloud.firestore {
         && request.resource.data.updatedAt is timestamp;
     }
 
-    match /admins/{uid} {
-      allow get: if signedIn()
-        && request.auth.uid == uid;
+    match /admins/{email} {
+      allow get: if hasVerifiedEmail()
+        && email == adminEmail();
       allow list, create, update, delete: if false;
     }
 

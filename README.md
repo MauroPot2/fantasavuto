@@ -9,7 +9,7 @@ con Jaspr e pensate per Firebase Hosting (`fantasavuto.web.app`).
 - archivio dei vincitori separato per ciascuna competizione;
 - regolamento nativo diviso in sezioni Markdown modificabili singolarmente;
 - gestione completa dei premi dall’area admin;
-- area admin protetta con accesso Google e allowlist Firestore;
+- area admin protetta con accesso Google e allowlist Firestore basata su email;
 - gestione completa degli sponsor: caricamento logo, link, ordine, visibilità,
   modifica ed eliminazione;
 - fascia sponsor automatica: non appare senza loghi attivi, resta statica con un
@@ -59,18 +59,34 @@ Il progetto Firebase previsto è già indicato come `fantasavuto` in
 La configurazione Web di Firebase identifica il progetto ma non concede
 privilegi amministrativi: l'accesso ai dati è protetto dalle regole incluse.
 
-## Primo amministratore
+## Amministratori tramite email
 
-La prima volta:
+Gli amministratori vengono autorizzati direttamente dalla Firebase Console,
+senza dover conoscere o copiare alcun UID.
 
-1. visita `/admin` e accedi con Google;
-2. la pagina mostrerà l'UID dell'account non ancora autorizzato;
-3. nella Firebase Console crea il documento Firestore `admins/<UID>`;
-4. aggiungi, facoltativamente, campi descrittivi come `name` ed `email`;
-5. ricarica `/admin`.
+Per aggiungere un amministratore:
 
-Il client non può creare o modificare documenti nella collezione `admins`.
-L'abilitazione iniziale passa quindi volutamente dalla Console Firebase.
+1. apri **Firestore Database** nella Firebase Console;
+2. apri o crea la collezione `admins`;
+3. crea un documento usando come **ID documento l'indirizzo email in minuscolo**,
+   per esempio `nome@gmail.com`;
+4. aggiungi un campo descrittivo qualsiasi, per esempio `name: "Mario Rossi"`;
+5. l'utente può quindi visitare `/admin` e accedere con lo stesso account Google.
+
+L'indirizzo viene normalizzato in minuscolo sia nel client sia nelle Security
+Rules. L'accesso è concesso solo se Firebase Authentication considera verificata
+l'email dell'account.
+
+Per revocare un amministratore è sufficiente eliminare il relativo documento da
+`admins`.
+
+Il client non può creare, modificare, elencare o eliminare documenti nella
+collezione `admins`: la gestione dell'allowlist resta riservata alla Console
+Firebase.
+
+> Prima di pubblicare le nuove regole, crea almeno il documento `admins/<tua-email>`
+> per non perdere temporaneamente l'accesso al pannello con il vecchio documento
+> basato su UID.
 
 ## Build e deploy
 
@@ -102,7 +118,7 @@ permessi necessari alla verifica dell'allowlist presente in Firestore.
 | `regulationSections/{id}` | paragrafi del regolamento, ordine e visibilità |
 | `prizes/{id}` | premi, valore, competizione, ordine e visibilità |
 | `sponsors/{id}` | nome, logo, link, ordine e stato pubblico |
-| `admins/{uid}` | allowlist degli amministratori |
+| `admins/{email}` | allowlist degli amministratori, con email normalizzata in minuscolo |
 | Storage `sponsors/*` | file dei loghi caricati dall'admin |
 
 Il regolamento attuale del vecchio Google Site è disponibile soprattutto come

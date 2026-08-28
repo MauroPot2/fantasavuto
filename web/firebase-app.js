@@ -386,10 +386,17 @@ function populateAdminUser(user) {
   );
 }
 
+function normalizeAdminEmail(user) {
+  return (user?.email || '').trim().toLowerCase();
+}
+
 async function isAuthorizedAdmin(user, services) {
+  const email = normalizeAdminEmail(user);
+  if (!email || !user.emailVerified) return false;
+
   const { db, firestoreSdk } = services;
   const snapshot = await firestoreSdk.getDoc(
-    firestoreSdk.doc(db, 'admins', user.uid),
+    firestoreSdk.doc(db, 'admins', email),
   );
   return snapshot.exists();
 }
@@ -1002,7 +1009,10 @@ async function initializeAdmin() {
         if (error.code !== 'permission-denied') console.error(error);
       }
 
-      setText('admin-user-uid', user.uid);
+      const email = normalizeAdminEmail(user);
+      const label = document.querySelector('#admin-unauthorized .uid-box span');
+      if (label) label.textContent = 'Email da autorizzare';
+      setText('admin-user-uid', email || 'Email non disponibile');
       show(byId('admin-unauthorized'));
     });
   } catch (error) {
