@@ -12,18 +12,9 @@ class SponsorBand extends StatelessComponent {
       attributes: const {'aria-labelledby': 'sponsor-title'},
       [
         div(classes: 'shell sponsor-surface', [
-          div(classes: 'sponsor-heading', [
-            div([
-              p(classes: 'eyebrow', [
-                Component.text('Il territorio fa squadra'),
-              ]),
-              h2(id: 'sponsor-title', [Component.text('Partner ufficiali')]),
-            ]),
-            p([
-              Component.text(
-                'Le realtà che sostengono Fantasavuto e accompagnano la stagione del Fantacalcio del Savuto.',
-              ),
-            ]),
+          div(classes: 'sponsor-dock-label', [
+            p(classes: 'eyebrow', [Component.text('Il territorio fa squadra')]),
+            h2(id: 'sponsor-title', [Component.text('Partner ufficiali')]),
           ]),
           div(
             classes: 'sponsor-viewport',
