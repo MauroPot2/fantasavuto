@@ -95,9 +95,20 @@ Gli upload file vengono ottimizzati automaticamente nel browser prima di raggiun
 
 Dopo la selezione del file il CMS mostra il peso originale e il peso ottimizzato, per esempio `1.99 MB → 84 KB`.
 
-Al primo accesso dell'admin dopo questo aggiornamento, il CMS verifica anche i loghi già presenti in `sponsors/*` e applica la cache lunga agli oggetti esistenti. Questa operazione non cambia il peso fisico dei vecchi PNG: per ridurli realmente basta sostituire il logo dello sponsor con un nuovo upload, che verrà ottimizzato automaticamente.
+Al primo accesso dell'admin il CMS applica automaticamente la cache lunga ai loghi già presenti in `sponsors/*`.
 
-Nel pannello Sponsor è disponibile il pulsante **Verifica Storage**. Il test carica una piccola immagine temporanea e la elimina subito; serve a distinguere tra bucket non attivato, regole non pubblicate e problemi di autorizzazione.
+Nel pannello Sponsor è disponibile anche **Ottimizza loghi esistenti**. Il comando:
+
+1. scarica ogni logo già collegato a uno sponsor tramite `storagePath`;
+2. converte PNG/JPG/WebP pesanti in WebP con gli stessi limiti dei nuovi upload;
+3. carica prima la nuova versione con cache di un anno;
+4. aggiorna `logoUrl` e `storagePath` in Firestore;
+5. elimina il vecchio oggetto solo dopo che Firestore è stato aggiornato correttamente;
+6. mostra a fine processo il peso complessivo prima/dopo e il risparmio ottenuto.
+
+I file già WebP sotto circa 180 KB e gli SVG leggeri vengono lasciati invariati e ricevono solo la cache lunga. Se una singola conversione fallisce, lo sponsor continua a usare il vecchio logo.
+
+Nel pannello Sponsor è disponibile anche il pulsante **Verifica Storage**. Il test carica una piccola immagine temporanea e la elimina subito; serve a distinguere tra bucket non attivato, regole non pubblicate e problemi di autorizzazione.
 
 Se Storage non è ancora stato attivato:
 
