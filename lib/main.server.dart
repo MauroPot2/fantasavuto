@@ -69,6 +69,11 @@ void main() {
           attributes: const {'type': 'module', 'src': '/cms-v2.js'},
           children: const [],
         ),
+        Component.element(
+          tag: 'script',
+          attributes: const {'type': 'module', 'src': '/cms-v2-overrides.js'},
+          children: const [],
+        ),
       ],
       body: const App(),
     ),
