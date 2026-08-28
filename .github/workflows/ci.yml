@@ -34,6 +34,7 @@ jobs:
           node --check web/firebase-app.js
           node --check web/cms-app.js
           node --check web/cms-v2.js
+          node --check web/cms-v2-overrides.js
           node --check web/site-utils.js
 
       - name: Run JavaScript tests
