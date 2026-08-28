@@ -66,6 +66,16 @@ class App extends StatelessComponent {
               accent: 'pink',
             ),
           ),
+          Route(
+            path: '/competizioni/dettaglio',
+            builder: (context, state) => const CompetitionPage(
+              competitionId: '__dynamic__',
+              title: 'Competizione',
+              tagline: 'Fantasavuto',
+              description: 'Dettagli e risultati della competizione.',
+              accent: 'lime',
+            ),
+          ),
         ],
       ),
     ]);
