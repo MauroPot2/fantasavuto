@@ -9,10 +9,21 @@ class SiteFooter extends StatelessComponent {
     return footer(classes: 'site-footer', [
       div(classes: 'shell footer-grid', [
         div(classes: 'footer-brand', [
-          span(classes: 'brand-mark brand-mark--small', [Component.text('FS')]),
+          img(
+            src: '/assets/fantasavuto-logo.webp',
+            alt: '',
+            classes: 'brand-logo brand-logo--footer',
+            attributes: const {
+              'width': '46',
+              'height': '46',
+              'loading': 'lazy',
+            },
+          ),
           div([
             strong([Component.text('Fantasavuto')]),
-            p([Component.text('Il Fantacalcio del Savuto, tutto in un posto.')]),
+            p([
+              Component.text('Il Fantacalcio del Savuto, tutto in un posto.'),
+            ]),
           ]),
         ]),
         nav(
@@ -20,6 +31,7 @@ class SiteFooter extends StatelessComponent {
           attributes: const {'aria-label': 'Link del footer'},
           [
             a(href: '/regolamento', [Component.text('Regolamento')]),
+            a(href: '/#premi', [Component.text('Premi')]),
             a(href: '/admin', [Component.text('Area admin')]),
             a(
               href: 'https://www.instagram.com/fantacalciosavuto/',
@@ -32,9 +44,8 @@ class SiteFooter extends StatelessComponent {
       ]),
       div(classes: 'shell footer-bottom', [
         p([Component.text('© 2026 Fantasavuto')]),
-        p([Component.text('Stagione 2025/26 · 3ª edizione')]),
+        p([Component.text('Stagione 2026/27 · 4ª edizione')]),
       ]),
     ]);
   }
 }
-

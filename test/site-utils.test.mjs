@@ -6,7 +6,9 @@ import {
   markdownToHtml,
   normalizeExternalUrl,
   safeFileName,
+  sortByOrder,
   sortSponsors,
+  sortWinners,
 } from '../web/site-utils.js';
 
 test('escapeHtml neutralizza markup non attendibile', () => {
@@ -44,4 +46,14 @@ test('sortSponsors usa ordine e nome', () => {
 
 test('safeFileName normalizza accenti e caratteri speciali', () => {
   assert.equal(safeFileName('Caffè del Savuto!.PNG'), 'caffe-del-savuto.png');
+});
+
+test('sortByOrder ordina contenuti editoriali', () => {
+  const result = sortByOrder([{ title: 'Premi', order: 30 }, { title: 'Mercato', order: 10 }, { title: 'Formazioni', order: 10 }]);
+  assert.deepEqual(result.map((item) => item.title), ['Formazioni', 'Mercato', 'Premi']);
+});
+
+test('sortWinners mostra prima il risultato più recente', () => {
+  const result = sortWinners([{ date: '2026-01-10', matchday: 18 }, { date: '2026-02-20', matchday: 24 }, { date: '2026-02-20', matchday: 25 }]);
+  assert.deepEqual(result.map((item) => item.matchday), [25, 24, 18]);
 });

@@ -10,17 +10,26 @@ void main() {
     const Document(
       title: 'Fantasavuto | Il Fantacalcio del Savuto',
       meta: const {
-        'description':
-            'Competizioni, vincitori di giornata, regolamento e sponsor del Fantacalcio del Savuto.',
+        'description': 'Competizioni, vincitori di giornata, regolamento e sponsor del Fantacalcio del Savuto.',
         'theme-color': '#071814',
         'robots': 'index,follow',
       },
       head: [
         link(href: '/styles.css', rel: 'stylesheet'),
         link(
-          href: '/favicon.svg',
+          href: '/favicon.png',
           rel: 'icon',
-          attributes: const {'type': 'image/svg+xml'},
+          attributes: const {'type': 'image/png', 'sizes': '64x64'},
+        ),
+        link(
+          href: '/apple-touch-icon.png',
+          rel: 'apple-touch-icon',
+          attributes: const {'sizes': '180x180'},
+        ),
+        link(
+          href: '/assets/fantasavuto-logo.webp',
+          rel: 'preload',
+          attributes: const {'as': 'image', 'type': 'image/webp'},
         ),
         Component.element(
           tag: 'meta',
