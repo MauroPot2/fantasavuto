@@ -1,0 +1,84 @@
+.cms-v2-create-competition {
+  margin-bottom: 38px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(199, 255, 46, 0.08);
+}
+
+.cms-v2-create-competition .admin-subsection__heading {
+  margin-bottom: 20px;
+}
+
+.cms-v2-create-competition .admin-subsection__heading h3 {
+  margin-bottom: 6px;
+  font-size: 23px;
+}
+
+.cms-v2-create-competition .admin-subsection__heading p,
+.cms-v2-sponsor-tools p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cms-v2-sponsor-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #f4f6f1;
+}
+
+.cms-v2-sponsor-tools strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.cms-v2-sponsor-tools__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cms-v2-status {
+  display: inline-flex;
+  max-width: 360px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #e7ebe8;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.cms-v2-status[data-state="success"] {
+  background: rgba(148, 200, 0, 0.18);
+  color: #4d6800;
+}
+
+.cms-v2-status[data-state="error"] {
+  border-radius: 10px;
+  background: #ffe0db;
+  color: #8e2b20;
+}
+
+@media (max-width: 760px) {
+  .cms-v2-sponsor-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .cms-v2-sponsor-tools__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cms-v2-status {
+    max-width: none;
+  }
+}
