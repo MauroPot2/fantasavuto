@@ -26,6 +26,12 @@ service cloud.firestore {
       return value is string && value.size() > 0 && value.size() <= maxLength;
     }
 
+    function isOptionalHttpsUrl(value) {
+      return value is string
+        && value.size() <= 2048
+        && (value == '' || value.matches('^https://.+'));
+    }
+
     function validWinner() {
       return request.resource.data.keys().hasOnly([
           'competitionId',
@@ -175,10 +181,112 @@ service cloud.firestore {
         && request.resource.data.updatedAt is timestamp;
     }
 
+    function validSiteSettings() {
+      return request.resource.data.keys().hasOnly([
+          'leagueName',
+          'season',
+          'editionLabel',
+          'currentMatchday',
+          'sponsorBarEnabled',
+          'sponsorBarTitle',
+          'sponsorBarDescription',
+          'sponsorBarSpeedSeconds',
+          'updatedAt'
+        ])
+        && isShortText(request.resource.data.leagueName, 80)
+        && isShortText(request.resource.data.season, 20)
+        && isShortText(request.resource.data.editionLabel, 30)
+        && request.resource.data.currentMatchday is int
+        && request.resource.data.currentMatchday >= 0
+        && request.resource.data.currentMatchday <= 60
+        && request.resource.data.sponsorBarEnabled is bool
+        && isShortText(request.resource.data.sponsorBarTitle, 80)
+        && isShortText(request.resource.data.sponsorBarDescription, 180)
+        && request.resource.data.sponsorBarSpeedSeconds is int
+        && request.resource.data.sponsorBarSpeedSeconds >= 10
+        && request.resource.data.sponsorBarSpeedSeconds <= 120
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validTeam() {
+      return request.resource.data.keys().hasOnly([
+          'name',
+          'manager',
+          'logoUrl',
+          'active',
+          'order',
+          'season',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isShortText(request.resource.data.name, 80)
+        && isShortText(request.resource.data.manager, 80)
+        && isOptionalHttpsUrl(request.resource.data.logoUrl)
+        && request.resource.data.active is bool
+        && request.resource.data.order is int
+        && request.resource.data.order >= 0
+        && request.resource.data.order <= 9999
+        && isShortText(request.resource.data.season, 20)
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    function validCompetition(competitionId) {
+      return competitionId in [
+          'campionato',
+          'champions-savuto',
+          'campione-inverno',
+          'coppa-sponsor'
+        ]
+        && request.resource.data.keys().hasOnly([
+          'name',
+          'tagline',
+          'description',
+          'accent',
+          'active',
+          'order',
+          'season',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isShortText(request.resource.data.name, 80)
+        && isShortText(request.resource.data.tagline, 80)
+        && isShortText(request.resource.data.description, 500)
+        && request.resource.data.accent in ['lime', 'orange', 'blue', 'pink']
+        && request.resource.data.active is bool
+        && request.resource.data.order is int
+        && request.resource.data.order >= 0
+        && request.resource.data.order <= 9999
+        && isShortText(request.resource.data.season, 20)
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.updatedAt is timestamp;
+    }
+
     match /admins/{email} {
       allow get: if hasVerifiedEmail()
         && email == adminEmail();
       allow list, create, update, delete: if false;
+    }
+
+    match /siteSettings/{documentId} {
+      allow get: if documentId == 'current';
+      allow list: if false;
+      allow create, update: if documentId == 'current'
+        && isAdmin()
+        && validSiteSettings();
+      allow delete: if false;
+    }
+
+    match /teams/{teamId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && validTeam();
+      allow delete: if isAdmin();
+    }
+
+    match /competitions/{competitionId} {
+      allow get, list: if isAdmin() || resource.data.active == true;
+      allow create, update: if isAdmin() && validCompetition(competitionId);
+      allow delete: if false;
     }
 
     match /siteContent/{documentId} {
@@ -193,8 +301,8 @@ service cloud.firestore {
     }
 
     match /sponsors/{sponsorId} {
-      allow get: if resource.data.active == true || isAdmin();
-      allow list: if resource.data.active == true || isAdmin();
+      allow get: if isAdmin() || resource.data.active == true;
+      allow list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validSponsor();
       allow delete: if isAdmin();
     }
@@ -206,13 +314,13 @@ service cloud.firestore {
     }
 
     match /regulationSections/{sectionId} {
-      allow get, list: if resource.data.active == true || isAdmin();
+      allow get, list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validRegulationSection();
       allow delete: if isAdmin();
     }
 
     match /prizes/{prizeId} {
-      allow get, list: if resource.data.active == true || isAdmin();
+      allow get, list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validPrize();
       allow delete: if isAdmin();
     }

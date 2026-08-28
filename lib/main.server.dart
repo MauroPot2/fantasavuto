@@ -16,6 +16,7 @@ void main() {
       },
       head: [
         link(href: '/styles.css', rel: 'stylesheet'),
+        link(href: '/admin-cms.css', rel: 'stylesheet'),
         link(
           href: '/favicon.png',
           rel: 'icon',
@@ -55,6 +56,11 @@ void main() {
         Component.element(
           tag: 'script',
           attributes: const {'type': 'module', 'src': '/firebase-app.js'},
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
+          attributes: const {'type': 'module', 'src': '/cms-app.js'},
           children: const [],
         ),
       ],
