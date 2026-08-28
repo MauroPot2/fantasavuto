@@ -2,10 +2,21 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    function isAdmin() {
+    function hasVerifiedEmail() {
       return request.auth != null
+        && request.auth.token.get('email', '') is string
+        && request.auth.token.get('email', '').size() > 0
+        && request.auth.token.get('email_verified', false) == true;
+    }
+
+    function adminEmail() {
+      return request.auth.token.get('email', '').lower();
+    }
+
+    function isAdmin() {
+      return hasVerifiedEmail()
         && firestore.exists(
-          /databases/(default)/documents/admins/$(request.auth.uid)
+          /databases/(default)/documents/admins/$(adminEmail())
         );
     }
 
