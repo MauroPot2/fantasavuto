@@ -7,7 +7,7 @@ L'area `/admin` è il centro di gestione della stagione.
 - **Dashboard**: stato rapido di stagione, giornata, squadre, competizioni, sponsor e risultati.
 - **Giornate**: pubblicazione dei vincitori e storico già esistente.
 - **Squadre**: anagrafica squadra/fantallenatore; le squadre attive vengono suggerite nel form del vincitore.
-- **Competizioni**: visibilità, ordine, tagline, descrizione e colore delle quattro competizioni ufficiali.
+- **Competizioni**: creazione, visibilità, ordine, nome, tagline, descrizione e colore delle competizioni.
 - **Regolamento**: sezioni Markdown e stagione del regolamento.
 - **Premi**: premi generali o associati alle competizioni.
 - **Sponsor**: singoli sponsor e configurazione globale della barra sponsor.
@@ -42,12 +42,16 @@ Configurazione generale del sito:
 
 ### `competitions/{id}`
 
-Gli ID restano stabili per non rompere URL e storico:
+Le quattro competizioni iniziali vengono create automaticamente, ma l'admin può aggiungerne altre.
+
+L'ID della competizione è uno slug permanente, per esempio:
 
 - `campionato`
 - `champions-savuto`
-- `campione-inverno`
-- `coppa-sponsor`
+- `coppa-calabria`
+- `supercoppa-savuto`
+
+Lo slug può contenere solo lettere minuscole, numeri e trattini. Non va cambiato dopo che la competizione ha risultati o premi associati.
 
 Campi:
 
@@ -61,16 +65,37 @@ Campi:
 - `createdAt`
 - `updatedAt`
 
-Al primo accesso admin il CMS inizializza automaticamente `siteSettings/current` e le quattro competizioni se non esistono.
+Le nuove competizioni attive appaiono automaticamente nella home. Per quelle non storiche viene usata la pagina pubblica generica `/competizioni/dettaglio?id=<slug>`, quindi non serve un nuovo deploy per ogni competizione.
 
 ## Barra sponsor
 
 La sezione Sponsor ha due livelli:
 
 1. **Barra sponsor**: abilita/disabilita l'intera fascia pubblica, titolo, descrizione e velocità di scorrimento.
-2. **Singoli sponsor**: nome, logo, link, ordine e visibilità, usando la gestione già presente.
+2. **Singoli sponsor**: nome, logo, link, ordine e visibilità.
 
 Nascondere la barra non elimina gli sponsor. Riattivandola, gli sponsor attivi tornano visibili nello stesso ordine.
+
+### Logo e Firebase Storage
+
+Per il logo ci sono due modalità:
+
+- **upload file**: usa Firebase Storage;
+- **URL HTTPS del logo**: non richiede Firebase Storage.
+
+Nel pannello Sponsor è disponibile il pulsante **Verifica Storage**. Il test carica una piccola immagine temporanea e la elimina subito; serve a distinguere tra bucket non attivato, regole non pubblicate e problemi di autorizzazione.
+
+Se Storage non è ancora stato attivato:
+
+1. Firebase Console → **Storage**;
+2. premi **Inizia / Get started** e crea il bucket del progetto;
+3. dalla root del repository pubblica le regole:
+
+```bash
+firebase deploy --only storage --project fantasavuto
+```
+
+Le regole consentono agli admin autorizzati di caricare immagini sotto `sponsors/*` fino a 5 MB.
 
 ## Deploy
 
