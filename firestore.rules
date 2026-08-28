@@ -278,13 +278,13 @@ service cloud.firestore {
     }
 
     match /teams/{teamId} {
-      allow get, list: if resource.data.active == true || isAdmin();
+      allow read: if isAdmin();
       allow create, update: if isAdmin() && validTeam();
       allow delete: if isAdmin();
     }
 
     match /competitions/{competitionId} {
-      allow get, list: if resource.data.active == true || isAdmin();
+      allow get, list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validCompetition(competitionId);
       allow delete: if false;
     }
@@ -301,8 +301,8 @@ service cloud.firestore {
     }
 
     match /sponsors/{sponsorId} {
-      allow get: if resource.data.active == true || isAdmin();
-      allow list: if resource.data.active == true || isAdmin();
+      allow get: if isAdmin() || resource.data.active == true;
+      allow list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validSponsor();
       allow delete: if isAdmin();
     }
@@ -314,13 +314,13 @@ service cloud.firestore {
     }
 
     match /regulationSections/{sectionId} {
-      allow get, list: if resource.data.active == true || isAdmin();
+      allow get, list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validRegulationSection();
       allow delete: if isAdmin();
     }
 
     match /prizes/{prizeId} {
-      allow get, list: if resource.data.active == true || isAdmin();
+      allow get, list: if isAdmin() || resource.data.active == true;
       allow create, update: if isAdmin() && validPrize();
       allow delete: if isAdmin();
     }
