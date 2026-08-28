@@ -3,8 +3,8 @@ import 'package:jaspr/jaspr.dart';
 
 /// Dock sponsor persistente ancorata al fondo dello schermo.
 ///
-/// La vetrina completa della homepage è gestita da [SponsorSection]; questa
-/// componente mostra invece una selezione scorrevole degli stessi partner.
+/// La vetrina completa della homepage è gestita dal componente SponsorSection;
+/// questa componente mostra invece una selezione scorrevole degli stessi partner.
 class SponsorBand extends StatelessComponent {
   const SponsorBand({super.key});
 
