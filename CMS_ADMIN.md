@@ -83,6 +83,20 @@ Per il logo ci sono due modalità:
 - **upload file**: usa Firebase Storage;
 - **URL HTTPS del logo**: non richiede Firebase Storage.
 
+Gli upload file vengono ottimizzati automaticamente nel browser prima di raggiungere Firebase Storage:
+
+- PNG/JPG/WebP pesanti vengono convertiti in **WebP**;
+- dimensione massima di rendering: **640 × 320 px**, senza deformare il logo;
+- trasparenza mantenuta;
+- qualità WebP adattiva con obiettivo di circa **180 KB o meno**;
+- SVG già leggeri vengono mantenuti in formato vettoriale;
+- nome oggetto versionato con timestamp;
+- `Cache-Control: public,max-age=31536000,immutable` per una cache browser di un anno.
+
+Dopo la selezione del file il CMS mostra il peso originale e il peso ottimizzato, per esempio `1.99 MB → 84 KB`.
+
+Al primo accesso dell'admin dopo questo aggiornamento, il CMS verifica anche i loghi già presenti in `sponsors/*` e applica la cache lunga agli oggetti esistenti. Questa operazione non cambia il peso fisico dei vecchi PNG: per ridurli realmente basta sostituire il logo dello sponsor con un nuovo upload, che verrà ottimizzato automaticamente.
+
 Nel pannello Sponsor è disponibile il pulsante **Verifica Storage**. Il test carica una piccola immagine temporanea e la elimina subito; serve a distinguere tra bucket non attivato, regole non pubblicate e problemi di autorizzazione.
 
 Se Storage non è ancora stato attivato:
@@ -107,7 +121,7 @@ rm -rf build/jaspr
 dart pub get
 dart run jaspr_cli:jaspr build --sitemap-domain https://fantasavuto.web.app
 ls -lah build/jaspr/index.html
-firebase deploy --only firestore:rules,storage,hosting --project fantasavuto
+firebase deploy --only hosting --project fantasavuto
 ```
 
-Verificare sempre l'esistenza di `build/jaspr/index.html` prima del deploy dell'hosting.
+Per questa ottimizzazione non cambiano le Security Rules: è sufficiente il deploy Hosting. Verificare sempre l'esistenza di `build/jaspr/index.html` prima del deploy.
