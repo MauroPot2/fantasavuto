@@ -23,9 +23,7 @@ class SponsorSection extends StatelessComponent {
                 p(classes: 'eyebrow', [
                   Component.text('Il territorio fa squadra'),
                 ]),
-                h2(id: 'sponsor-title', [
-                  Component.text('Partner ufficiali'),
-                ]),
+                h2(id: 'sponsor-title', [Component.text('Partner ufficiali')]),
               ]),
               p([
                 Component.text(
@@ -33,19 +31,16 @@ class SponsorSection extends StatelessComponent {
                 ),
               ]),
             ]),
-            div(
-              classes: 'sponsor-showcase__intro',
-              [
-                span(classes: 'sponsor-showcase__badge', [
-                  Component.text('Grazie ai nostri partner'),
-                ]),
-                p([
-                  Component.text(
-                    'Scopri chi rende possibile il Fantacalcio del Savuto. Tocca un logo per visitare il sito del partner.',
-                  ),
-                ]),
-              ],
-            ),
+            div(classes: 'sponsor-showcase__intro', [
+              span(classes: 'sponsor-showcase__badge', [
+                Component.text('Grazie ai nostri partner'),
+              ]),
+              p([
+                Component.text(
+                  'Scopri chi rende possibile il Fantacalcio del Savuto.',
+                ),
+              ]),
+            ]),
             div(
               id: 'sponsor-track',
               classes: 'sponsor-showcase__grid',
