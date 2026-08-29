@@ -40,6 +40,7 @@ jobs:
           node --check web/sponsor-image-optimization.js
           node --check web/sponsor-dock-sync.js
           node --check web/site-utils.js
+          node --check web/visitor-counter.js
 
       - name: Run JavaScript tests
         run: node --test test/site-utils.test.mjs
@@ -48,4 +49,8 @@ jobs:
         run: dart run jaspr_cli:jaspr build --sitemap-domain https://fantasavuto.web.app
 
       - name: Verify hosting entry point
-        run: test -f build/jaspr/index.html
+        run: |
+          test -f build/jaspr/index.html
+          test -f build/jaspr/visitor-counter.js
+          grep -Fq '/visitor-counter.js' build/jaspr/index.html
+          grep -Fq 'id="visitor-count"' build/jaspr/index.html
