@@ -63,6 +63,11 @@ void main() {
         ),
         Component.element(
           tag: 'script',
+          attributes: const {'type': 'module', 'src': '/visitor-counter.js'},
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
           attributes: const {'type': 'module', 'src': '/cms-app.js'},
           children: const [],
         ),

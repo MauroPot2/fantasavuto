@@ -279,6 +279,23 @@ service cloud.firestore {
       allow list, create, update, delete: if false;
     }
 
+    match /siteMetrics/{documentId} {
+      allow get: if documentId == 'visits';
+      allow list, delete: if false;
+      allow create: if documentId == 'visits'
+        && request.resource.data.keys().hasOnly(['total', 'updatedAt'])
+        && request.resource.data.total is int
+        && request.resource.data.total == 1
+        && request.resource.data.updatedAt == request.time;
+      allow update: if documentId == 'visits'
+        && request.resource.data.keys().hasOnly(['total', 'updatedAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['total', 'updatedAt'])
+        && resource.data.total is int
+        && request.resource.data.total is int
+        && request.resource.data.total == resource.data.total + 1
+        && request.resource.data.updatedAt == request.time;
+    }
+
     match /siteSettings/{documentId} {
       allow get: if documentId == 'current';
       allow list: if false;

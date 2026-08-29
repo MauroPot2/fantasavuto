@@ -40,6 +40,13 @@ class SiteFooter extends StatelessComponent {
       ]),
       div(classes: 'shell footer-bottom', [
         p([Component.text('© 2026 Fantasavuto')]),
+        p(
+          attributes: {'aria-live': 'polite'},
+          [
+            Component.text('Visite · '),
+            span(id: 'visitor-count', [Component.text('—')]),
+          ],
+        ),
         p([Component.text('Stagione 2026/27 · 4ª edizione')]),
       ]),
       div(classes: 'shell footer-grid', [
