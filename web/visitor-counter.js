@@ -24,7 +24,9 @@ function getSafeLocalStorage() {
 
 function readNumber(storage, key) {
   if (!storage) return null;
-  const value = Number(storage.getItem(key));
+  const rawValue = storage.getItem(key);
+  if (rawValue == null) return null;
+  const value = Number(rawValue);
   return Number.isFinite(value) ? value : null;
 }
 
