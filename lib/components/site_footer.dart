@@ -6,18 +6,14 @@ class SiteFooter extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return footer(classes: 'site-footer', [
+    return const footer(classes: 'site-footer', [
       div(classes: 'shell footer-grid', [
         div(classes: 'footer-brand', [
           img(
             src: '/assets/fantasavuto-logo.webp',
             alt: '',
             classes: 'brand-logo brand-logo--footer',
-            attributes: const {
-              'width': '46',
-              'height': '46',
-              'loading': 'lazy',
-            },
+            attributes: {'width': '46', 'height': '46', 'loading': 'lazy'},
           ),
           div([
             strong([Component.text('Fantasavuto')]),
@@ -28,7 +24,7 @@ class SiteFooter extends StatelessComponent {
         ]),
         nav(
           classes: 'footer-links',
-          attributes: const {'aria-label': 'Link del footer'},
+          attributes: {'aria-label': 'Link del footer'},
           [
             a(href: '/regolamento', [Component.text('Regolamento')]),
             a(href: '/#premi', [Component.text('Premi')]),
@@ -36,7 +32,7 @@ class SiteFooter extends StatelessComponent {
             a(
               href: 'https://www.instagram.com/fantacalciosavuto/',
               target: Target.blank,
-              attributes: const {'rel': 'noopener noreferrer'},
+              attributes: {'rel': 'noopener noreferrer'},
               [Component.text('Instagram')],
             ),
           ],
@@ -45,6 +41,15 @@ class SiteFooter extends StatelessComponent {
       div(classes: 'shell footer-bottom', [
         p([Component.text('© 2026 Fantasavuto')]),
         p([Component.text('Stagione 2026/27 · 4ª edizione')]),
+      ]),
+      div(classes: 'shell footer-grid', [
+        p(classes: 'footer-brand', [
+          p([
+            Component.text(
+              'I diritti relativi ai termini Fantacalcio® e Mantra® e ai loghi correlati appartengono ai legittimi proprietari. Fantacalcio e Mantra sono marchi registrati da Fantacalcio S.r.l. Questo sito viene gestito in totale autonomia e non rappresenta in alcun modo la piattaforma ufficiale, né è a essa collegato, sponsorizzato o affiliato. Tutti i marchi registrati citati appartengono ai rispettivi proprietari.',
+            ),
+          ]),
+        ]),
       ]),
     ]);
   }
