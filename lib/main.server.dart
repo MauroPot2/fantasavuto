@@ -10,11 +10,34 @@ void main() {
     const Document(
       title: 'Fantasavuto | Il Fantacalcio del Savuto',
       meta: const {
-        'description': 'Competizioni, vincitori di giornata, regolamento e sponsor del Fantacalcio del Savuto.',
+        'description':
+            'Competizioni, vincitori di giornata, regolamento e sponsor del Fantacalcio del Savuto.',
         'theme-color': '#071814',
         'robots': 'index,follow',
       },
       head: [
+        Component.element(
+          tag: 'script',
+          attributes: const {
+            'async': '',
+            'src': 'https://www.googletagmanager.com/gtag/js?id=G-HKCHXL4QNM',
+          },
+          children: const [],
+        ),
+
+        Component.element(
+          tag: 'script',
+          attributes: const {},
+          children: [
+            Component.text('''
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HKCHXL4QNM');
+'''),
+          ],
+        ),
+
         link(href: '/styles.css', rel: 'stylesheet'),
         link(href: '/sponsor-material.css', rel: 'stylesheet'),
         link(href: '/sponsor-section.css', rel: 'stylesheet'),
@@ -93,12 +116,18 @@ void main() {
         ),
         Component.element(
           tag: 'script',
-          attributes: const {'type': 'module', 'src': '/sponsor-cache-migration.js'},
+          attributes: const {
+            'type': 'module',
+            'src': '/sponsor-cache-migration.js',
+          },
           children: const [],
         ),
         Component.element(
           tag: 'script',
-          attributes: const {'type': 'module', 'src': '/sponsor-image-optimization.js'},
+          attributes: const {
+            'type': 'module',
+            'src': '/sponsor-image-optimization.js',
+          },
           children: const [],
         ),
       ],

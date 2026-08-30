@@ -50,12 +50,10 @@ class SiteFooter extends StatelessComponent {
         p([Component.text('Stagione 2026/27 · 4ª edizione')]),
       ]),
       div(classes: 'shell footer-grid', [
-        p(classes: 'footer-brand', [
-          p([
-            Component.text(
-              'I diritti relativi ai termini Fantacalcio® e Mantra® e ai loghi correlati appartengono ai legittimi proprietari. Fantacalcio e Mantra sono marchi registrati da Fantacalcio S.r.l. Questo sito viene gestito in totale autonomia e non rappresenta in alcun modo la piattaforma ufficiale, né è a essa collegato, sponsorizzato o affiliato. Tutti i marchi registrati citati appartengono ai rispettivi proprietari.',
-            ),
-          ]),
+        p(classes: 'footer-policy', [
+          Component.text(
+            'I diritti relativi ai termini Fantacalcio® e Mantra® e ai loghi correlati appartengono ai legittimi proprietari. Fantacalcio e Mantra sono marchi registrati da Fantacalcio S.r.l. Questo sito viene gestito in totale autonomia e non rappresenta in alcun modo la piattaforma ufficiale, né è a essa collegato, sponsorizzato o affiliato. Tutti i marchi registrati citati appartengono ai rispettivi proprietari.',
+          ),
         ]),
       ]),
     ]);
