@@ -18,22 +18,18 @@ void main() {
       head: [
         Component.element(
           tag: 'script',
-          attributes: const {
-            'async': '',
-            'src': 'https://www.googletagmanager.com/gtag/js?id=G-HKCHXL4QNM',
-          },
-          children: const [],
-        ),
-
-        Component.element(
-          tag: 'script',
           attributes: const {},
           children: [
             Component.text('''
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-HKCHXL4QNM');
+
+gtag('consent', 'default', {
+  'analytics_storage': 'denied',
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied'
+});
 '''),
           ],
         ),
@@ -42,6 +38,7 @@ gtag('config', 'G-HKCHXL4QNM');
         link(href: '/sponsor-material.css', rel: 'stylesheet'),
         link(href: '/sponsor-section.css', rel: 'stylesheet'),
         link(href: '/admin-cms.css', rel: 'stylesheet'),
+        link(href: '/cookie-consent.css', rel: 'stylesheet'),
         link(href: '/cms-v2.css', rel: 'stylesheet'),
         link(
           href: '/favicon.png',
@@ -120,6 +117,11 @@ gtag('config', 'G-HKCHXL4QNM');
             'type': 'module',
             'src': '/sponsor-cache-migration.js',
           },
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
+          attributes: const {'src': '/cookie-consent.js', 'defer': ''},
           children: const [],
         ),
         Component.element(
