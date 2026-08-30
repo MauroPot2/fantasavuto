@@ -56,27 +56,6 @@ gtag('consent', 'default', {
           attributes: const {'as': 'image', 'type': 'image/webp'},
         ),
         Component.element(
-          tag: 'meta',
-          attributes: const {
-            'property': 'og:title',
-            'content': 'Fantasavuto | Il Fantacalcio del Savuto',
-          },
-          children: const [],
-        ),
-        Component.element(
-          tag: 'meta',
-          attributes: const {
-            'property': 'og:description',
-            'content': 'Tutto il Fantacalcio del Savuto in un solo portale.',
-          },
-          children: const [],
-        ),
-        Component.element(
-          tag: 'meta',
-          attributes: const {'property': 'og:type', 'content': 'website'},
-          children: const [],
-        ),
-        Component.element(
           tag: 'script',
           attributes: const {'type': 'module', 'src': '/firebase-app.js'},
           children: const [],
@@ -127,6 +106,11 @@ gtag('consent', 'default', {
         Component.element(
           tag: 'script',
           attributes: const {'src': '/analytics-events.js', 'defer': ''},
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
+          attributes: const {'src': '/seo-structured-data.js', 'defer': ''},
           children: const [],
         ),
         Component.element(
