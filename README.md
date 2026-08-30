@@ -92,9 +92,14 @@ Firebase.
 
 ```bash
 dart run jaspr_cli:jaspr build --sitemap-domain https://fantasavuto.web.app
+npm run seo:sitemap
 firebase use fantasavuto
 firebase deploy --only firestore:rules,storage,hosting
 ```
+
+Il passaggio `npm run seo:sitemap` rimuove dalla sitemap le route riservate o
+generiche che non devono essere proposte ai motori di ricerca, come `/admin` e
+`/competizioni/dettaglio` senza un ID di competizione.
 
 Per verificare una versione prima di pubblicarla sul dominio principale:
 
@@ -107,6 +112,28 @@ pubblica in `firebase.json`.
 
 Al primo deploy delle regole Storage, Firebase può chiedere di abilitare i
 permessi necessari alla verifica dell'allowlist presente in Firestore.
+
+## SEO e Google Search Console
+
+Il sito usa come origine canonica `https://fantasavuto.web.app` e include:
+
+- title e description specifici per home, regolamento e competizioni;
+- URL canonical per evitare duplicati;
+- metadata Open Graph e Twitter;
+- `robots.txt` con riferimento alla sitemap;
+- dati strutturati `WebSite`, `WebPage` e `CollectionPage`;
+- `noindex,nofollow` per l'area amministrativa;
+- sitemap ripulita dalle route non destinate all'indicizzazione.
+
+Dopo il deploy, in Google Search Console aggiungi la proprietà con prefisso URL
+`https://fantasavuto.web.app`, completa la verifica richiesta da Google e invia:
+
+```text
+https://fantasavuto.web.app/sitemap.xml
+```
+
+Poi usa **Controllo URL** sulla home e richiedi l'indicizzazione. Le nuove pagine
+pubbliche possono essere controllate nello stesso modo.
 
 ## Modello dati
 
