@@ -126,6 +126,11 @@ gtag('consent', 'default', {
         ),
         Component.element(
           tag: 'script',
+          attributes: const {'src': '/analytics-events.js', 'defer': ''},
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
           attributes: const {
             'type': 'module',
             'src': '/sponsor-image-optimization.js',
