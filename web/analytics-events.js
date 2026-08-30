@@ -39,6 +39,27 @@
     return 'sponsor';
   }
 
+  function competitionIdFromAnchor(anchor, rawHref) {
+    const datasetId = anchor.dataset.competitionId?.trim();
+    if (datasetId) return datasetId;
+
+    try {
+      const url = new URL(rawHref, window.location.origin);
+
+      if (url.pathname === '/competizioni/dettaglio') {
+        return url.searchParams.get('id')?.trim() || 'unknown';
+      }
+
+      if (url.pathname.startsWith('/competizioni/')) {
+        return url.pathname.split('/').filter(Boolean).pop() || 'unknown';
+      }
+    } catch (_) {
+      // Fall through to the safe fallback below.
+    }
+
+    return 'unknown';
+  }
+
   document.addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
@@ -59,9 +80,8 @@
     }
 
     if (rawHref.startsWith('/competizioni/')) {
-      const competitionId = rawHref.split('/').filter(Boolean).pop() || 'unknown';
       sendEvent('select_competition', {
-        competition_id: competitionId,
+        competition_id: competitionIdFromAnchor(anchor, rawHref),
         source: linkSource(anchor),
       });
       return;
