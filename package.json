@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs",
+    "seo:sitemap": "node tool/postprocess-sitemap.mjs"
   },
   "dependencies": {
     "firebase": "^12.18.0"
