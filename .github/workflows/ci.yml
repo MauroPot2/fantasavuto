@@ -40,6 +40,10 @@ jobs:
           node --check web/sponsor-image-optimization.js
           node --check web/sponsor-dock-sync.js
           node --check web/site-utils.js
+          node --check web/cookie-consent.js
+          node --check web/analytics-events.js
+          node --check web/seo-structured-data.js
+          node --check tool/postprocess-sitemap.mjs
 
       - name: Run JavaScript tests
         run: node --test test/site-utils.test.mjs
@@ -47,5 +51,15 @@ jobs:
       - name: Build Jaspr static site
         run: dart run jaspr_cli:jaspr build --sitemap-domain https://fantasavuto.web.app
 
-      - name: Verify hosting entry point
-        run: test -f build/jaspr/index.html
+      - name: Clean sitemap for search engines
+        run: npm run seo:sitemap
+
+      - name: Verify SEO output
+        run: |
+          test -f build/jaspr/index.html
+          test -f build/jaspr/sitemap.xml
+          test -f build/jaspr/robots.txt
+          grep -q 'Sitemap: https://fantasavuto.web.app/sitemap.xml' build/jaspr/robots.txt
+          grep -q '<loc>https://fantasavuto.web.app/regolamento</loc>' build/jaspr/sitemap.xml
+          ! grep -q '<loc>https://fantasavuto.web.app/admin</loc>' build/jaspr/sitemap.xml
+          ! grep -q '<loc>https://fantasavuto.web.app/competizioni/dettaglio</loc>' build/jaspr/sitemap.xml
